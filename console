@@ -1,0 +1,52 @@
+#!/usr/bin/env php
+
+<?php
+
+require 'vendor/autoload.php';
+
+use MyXplor\ConsoleCommand;
+use MyXplor\Table;
+use MyXplor\ToyRobot;
+
+$table = new Table(5, 5);
+$toyRobot = new ToyRobot($table);
+$consoleCommand = new ConsoleCommand($toyRobot);
+
+echo "Give a command\n";
+
+$i = 0;
+while(false != ($line = fgets(STDIN))) {
+    try {
+        $action = trim($line);
+        
+        //Check if the first command isn't PLACE, if so break out
+        if($i == 0 && strpos($action, "PLACE") === false) {
+            throw new Exception('First command has to be PLACE with arguments!!!');
+        }
+        
+        $parameters = [];
+    
+        //PLACE command has parameters, so check whether the action is a PLACE command
+        if(strpos($action, "PLACE") !== false) {
+            $commandSplit = explode(" ", $action);
+            
+            if (count($commandSplit) <= 1) {
+                throw new Exception('Missing arguemnts for PLACE command');
+            }
+            
+            $action = trim($commandSplit[0]);
+            $parameters = explode(",", trim($commandSplit[1]));
+            
+            if (count($parameters) <= 2) {
+                throw new Exception("Arguments count for PLACE command doesn't match");
+            }
+        }
+    
+        $consoleCommand->execute($action, $parameters);
+    } catch (Exception $e) {
+        echo sprintf("%s: %s", $e->getCode(), $e->getMessage());
+        break;
+    }
+
+    $i++;
+}

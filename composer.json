@@ -1,0 +1,16 @@
+{
+    "name": "myxplor/toy-robot",
+    "description": "This is a toy robot interactive puzzle in PHP",
+    "require": {
+        "php": ">=7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MyXplor\\": "src/",
+            "Test\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    }
+}
